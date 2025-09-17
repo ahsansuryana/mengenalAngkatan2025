@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Orang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <div class="max-w-4xl mx-auto p-4">
+      <h1 class="text-2xl font-bold text-center mb-6">Daftar Orang</h1>
+
+      <!-- Container untuk data -->
+      <div
+        id="people-container"
+        class="grid gap-6 sm:grid-cols-2 md:grid-cols-3"
+      >
+        <!-- Default kosong -->
+        <p id="loading" class="text-center col-span-full text-gray-500">
+          Memuat data...
+        </p>
+      </div>
+    </div>
+
+    <script>
+      async function loadPeople() {
+        try {
+          // Contoh endpoint API (bisa diganti sesuai backend kamu)
+          const res = await fetch(
+            "https://script.google.com/macros/s/AKfycbzxard2Q5phhm4EWnRMQ6WZKxprtKex3xHdaYEZB82-4pFdb-D0OKZNjIb2IBBKsos/exec"
+          );
+          const data = await res.json();
+
+          const container = document.getElementById("people-container");
+          container.innerHTML = ""; // kosongkan "memuat data..."
+
+          data.forEach((person) => {
+            const card = document.createElement("div");
+            card.className =
+              "bg-white rounded-2xl shadow p-4 flex flex-col items-center";
+
+            card.innerHTML = `
+            <img src="${person.image.replace(
+              "https://drive.google.com/uc?export=download&id=",
+              "https://drive.google.com/thumbnail?id="
+            )}" alt="Foto ${person.nickname}" 
+                 class="w-48 h-48 rounded-full object-cover mb-3">
+            <h2 class="text-lg font-semibold">${person.nickname}</h2>
+            <p class="text-sm text-gray-500">${person.fullname}</p>
+          `;
+
+            container.appendChild(card);
+          });
+        } catch (err) {
+          document.getElementById(
+            "people-container"
+          ).innerHTML = `<p class="text-center col-span-full text-red-500">Gagal memuat data</p>`;
+          console.error(err);
+        }
+      }
+
+      // Jalankan saat halaman dibuka
+      loadPeople();
+    </script>
+  </body>
+</html>
