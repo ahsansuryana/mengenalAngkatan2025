@@ -27,7 +27,7 @@
         try {
           // Contoh endpoint API (bisa diganti sesuai backend kamu)
           const res = await fetch(
-            "https://script.google.com/macros/s/AKfycbzxard2Q5phhm4EWnRMQ6WZKxprtKex3xHdaYEZB82-4pFdb-D0OKZNjIb2IBBKsos/exec"
+            "https://script.google.com/macros/s/AKfycbxnlr6yMjh2Fgjn36nhFny3xtjCjj4vaFHCpP2CPBIOrrcqgEoEPmBeaPMsH8i7/exec"
           );
           const data = await res.json();
 
@@ -45,7 +45,7 @@
               "https://drive.google.com/thumbnail?id="
             )}&sz=w1000-h1000" alt="Foto ${person.nickname}" 
                  class="w-48 h-48 rounded-full object-cover mb-3">
-            <h2 class="text-lg font-semibold">${person.nickname}</h2>
+            <h2 class="text-lg font-semibold">${person.kode} - ${person.nickname}</h2>
             <p class="text-sm text-gray-500">${person.fullname}</p>
           `;
 
