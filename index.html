@@ -8,12 +8,22 @@
   </head>
   <body class="bg-gray-100 text-gray-800">
     <div class="max-w-4xl mx-auto p-4 relative">
-      <!-- Counter di kanan atas -->
+      <!-- Header atas (counter + tombol acak) -->
       <div
-        id="counter"
-        class="sticky aspect-square h-[2rem] top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full shadow"
+        class="flex justify-end items-center gap-2 sticky top-4 right-4 z-10"
       >
-        0
+        <div
+          id="counter"
+          class="aspect-square h-[2rem] flex items-center justify-center bg-green-500 text-white rounded-full shadow"
+        >
+          0
+        </div>
+        <button
+          id="shuffle-btn"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg shadow text-sm"
+        >
+          Acak Urutan
+        </button>
       </div>
 
       <h1 class="text-2xl font-bold text-center mb-6">Daftar Orang</h1>
@@ -23,7 +33,6 @@
         id="people-container"
         class="grid gap-6 sm:grid-cols-2 md:grid-cols-3"
       >
-        <!-- Default kosong -->
         <p id="loading" class="text-center col-span-full text-gray-500">
           Memuat data...
         </p>
@@ -40,14 +49,17 @@
 
           const container = document.getElementById("people-container");
           const counter = document.getElementById("counter");
+          const shuffleBtn = document.getElementById("shuffle-btn");
+
           container.innerHTML = "";
+          let count = 0;
+          let cards = [];
 
-          let count = 0; // jumlah card hijau
-
+          // Buat card
           data.forEach((person) => {
             const card = document.createElement("div");
             card.className =
-              " rounded-2xl shadow p-4 flex flex-col items-center cursor-pointer transition-colors duration-300";
+              "bg-white rounded-2xl shadow p-4 flex flex-col items-center cursor-pointer transition-colors duration-300";
 
             card.innerHTML = `
               <img src="${person.image.replace(
@@ -55,7 +67,7 @@
                 "https://drive.google.com/thumbnail?id="
               )}&sz=w1000-h1000" alt="Foto ${person.nickname}" 
                    class="w-48 h-48 rounded-full object-cover mb-3">
-                   <h2 class="text-lg font-semibold">${person.kode}</h2>
+              <h2 class="text-lg font-semibold">${person.kode}</h2>
               <h2 class="text-lg font-semibold">${person.nickname}</h2>
               <p class="text-sm text-gray-500">${person.fullname}</p>
             `;
@@ -63,6 +75,7 @@
             // Event klik -> toggle hijau + update counter
             card.addEventListener("click", () => {
               card.classList.toggle("bg-green-500");
+              card.classList.toggle("bg-white");
               card.classList.toggle("text-white");
 
               if (card.classList.contains("bg-green-500")) {
@@ -74,6 +87,23 @@
             });
 
             container.appendChild(card);
+            cards.push(card);
+          });
+
+          // Fungsi untuk shuffle array
+          function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+          }
+
+          // Event tombol acak
+          shuffleBtn.addEventListener("click", () => {
+            shuffle(cards);
+            container.innerHTML = "";
+            cards.forEach((card) => container.appendChild(card));
           });
         } catch (err) {
           document.getElementById(
