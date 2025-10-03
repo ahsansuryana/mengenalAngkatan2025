@@ -3,12 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Angkatan 2025</title>
+    <title>Daftar Orang</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-gray-100 text-gray-800">
-    <div class="max-w-4xl mx-auto p-4">
-      <h1 class="text-2xl font-bold text-center mb-6">Teknik Informatika 2025</h1>
+    <div class="max-w-4xl mx-auto p-4 relative">
+      <!-- Counter di kanan atas -->
+      <div
+        id="counter"
+        class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full shadow"
+      >
+        0
+      </div>
+
+      <h1 class="text-2xl font-bold text-center mb-6">Daftar Orang</h1>
 
       <!-- Container untuk data -->
       <div
@@ -25,34 +33,46 @@
     <script>
       async function loadPeople() {
         try {
-          // Contoh endpoint API (bisa diganti sesuai backend kamu)
           const res = await fetch(
             "https://script.google.com/macros/s/AKfycbxnlr6yMjh2Fgjn36nhFny3xtjCjj4vaFHCpP2CPBIOrrcqgEoEPmBeaPMsH8i7/exec"
           );
           const data = await res.json();
 
           const container = document.getElementById("people-container");
-          container.innerHTML = ""; // kosongkan "memuat data..."
+          const counter = document.getElementById("counter");
+          container.innerHTML = "";
+
+          let count = 0; // jumlah card hijau
 
           data.forEach((person) => {
             const card = document.createElement("div");
             card.className =
-              "bg-white rounded-2xl shadow p-4 flex flex-col items-center";
+              " rounded-2xl shadow p-4 flex flex-col items-center cursor-pointer transition-colors duration-300";
 
             card.innerHTML = `
-            <img src="${person.image.replace(
-              "https://drive.google.com/uc?export=download&id=",
-              "https://drive.google.com/thumbnail?id="
-            )}&sz=w1000-h1000" alt="Foto ${person.nickname}" 
-                 class="w-48 h-48 rounded-full object-cover mb-3">
-                 <h2 class="text-lg font-semibold">${person.kode}</h2>
-            <h2 class="text-lg font-semibold">${person.nickname}</h2>
-            <p class="text-sm text-gray-500">${person.fullname}</p>
-          `;
-        card.addEventListener("click", () => {
+              <img src="${person.image.replace(
+                "https://drive.google.com/uc?export=download&id=",
+                "https://drive.google.com/thumbnail?id="
+              )}&sz=w1000-h1000" alt="Foto ${person.nickname}" 
+                   class="w-48 h-48 rounded-full object-cover mb-3">
+                   <h2 class="text-lg font-semibold">${person.kode}</h2>
+              <h2 class="text-lg font-semibold">${person.nickname}</h2>
+              <p class="text-sm text-gray-500">${person.fullname}</p>
+            `;
+
+            // Event klik -> toggle hijau + update counter
+            card.addEventListener("click", () => {
               card.classList.toggle("bg-green-500");
               card.classList.toggle("text-white");
+
+              if (card.classList.contains("bg-green-500")) {
+                count++;
+              } else {
+                count--;
+              }
+              counter.textContent = count;
             });
+
             container.appendChild(card);
           });
         } catch (err) {
@@ -63,7 +83,6 @@
         }
       }
 
-      // Jalankan saat halaman dibuka
       loadPeople();
     </script>
   </body>
