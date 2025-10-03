@@ -48,7 +48,10 @@
             <h2 class="text-lg font-semibold">${person.kode} <br /> ${person.nickname}</h2>
             <p class="text-sm text-gray-500">${person.fullname}</p>
           `;
-
+        card.addEventListener("click", () => {
+              card.classList.toggle("bg-green-500");
+              card.classList.toggle("text-white");
+            });
             container.appendChild(card);
           });
         } catch (err) {
